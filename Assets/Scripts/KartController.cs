@@ -17,6 +17,7 @@ public class KartController : MonoBehaviour
     //Kart movement parameters
     public float kartWeight;
     public float acceleration;
+    public float brakesStrength;
     public float gravity;
     public float steering;
 
@@ -61,17 +62,21 @@ public class KartController : MonoBehaviour
     {
         //Update kart model position
         kartVisuals.setPosition(sphere.transform.position - new Vector3(0, 1.2f, 0));
-
-        //Set the speed according to the acceleration value and the trigger pressure
-        speed = accelerationInput * acceleration;
-
+        
         //Check for axis and compute steer rotation
-        if (axisInput != 0) {
+        if (axisInput != 0)
+        {
             int steerDirection = (axisInput > 0) ? 1 : -1;
             float steerAmmount = Mathf.Abs(axisInput);
 
             Steer(steerDirection, steerAmmount);
         }
+
+
+        //Set the speed according to the acceleration value and the trigger pressure
+        speed = accelerationInput * acceleration;
+        speed -= brakesInput * brakesStrength;
+
 
         //Compute speed
         currentSpeed = Mathf.SmoothStep(currentSpeed, speed, Time.deltaTime * 12f); speed = 0f;
@@ -88,8 +93,7 @@ public class KartController : MonoBehaviour
 
         //Rotate kart steering wheel
         kartVisuals.rotateSteeringWheel(currentRotate);
-        kartVisuals.rotateFrontWheels(currentRotate);
-        kartVisuals.rotateWheels(currentSpeed);
+        kartVisuals.rotateWheels(currentSpeed, currentRotate);
     }
 
     private void FixedUpdate()
@@ -105,7 +109,8 @@ public class KartController : MonoBehaviour
         Debug.DrawRay(transform.position, Vector3.down * kartWeight * gravity, Color.blue);
 
         //Rotate the whole kart according to the axis
-        transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y + currentRotate, 0),
+        if (currentSpeed!=0)
+            transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y + currentRotate, 0),
                     Time.deltaTime * 5f);
     }
 }

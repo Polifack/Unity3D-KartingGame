@@ -47,25 +47,16 @@ public class KartVisual : MonoBehaviour
         steeringWheel.transform.eulerAngles = new Vector3(steeringWheel.transform.eulerAngles.x, steeringWheel.transform.eulerAngles.y, ammount* steeringWheelRotationPower);
     }
 
-    public void rotateFrontWheels(float ammount) {
-        float rotationValue = Mathf.Clamp(ammount * frontWheelRotationPower, -30, 30);
-        foreach (GameObject go in frontWheels)
-        {
-            Vector3 rotationVector = new Vector3(0, (rotationValue), 0);
-            go.transform.localRotation = Quaternion.Euler(rotationVector);
-        }
-    }
-
-    public void rotateWheels(float ammount)
+    public void rotateWheels(float speed, float rotation)
     {
         foreach (GameObject go in frontWheels)
         {
-            Vector3 rotationVector = new Vector3(0, 0, go.transform.localEulerAngles.z+ ammount);
+            Vector3 rotationVector = new Vector3(0, rotation, go.transform.localEulerAngles.z+ speed);
             go.transform.localRotation = Quaternion.Euler(rotationVector);
         }
         foreach (GameObject go in backWheels)
         {
-            Vector3 rotationVector = new Vector3(0, (0), go.transform.localEulerAngles.z + ammount);
+            Vector3 rotationVector = new Vector3(0, (0), go.transform.localEulerAngles.z + speed);
             go.transform.localRotation = Quaternion.Euler(rotationVector);
         }
     }
