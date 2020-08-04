@@ -224,6 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 241224082}
   - component: {fileID: 241224083}
+  - component: {fileID: 241224084}
   m_Layer: 0
   m_Name: Kart
   m_TagString: Untagged
@@ -259,14 +260,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sphere: {fileID: 669800716}
-  kartXRotation: {fileID: 1551593618173742879}
-  kartYRotation: {fileID: 1559179618}
-  ground:
+  kartVisuals: {fileID: 241224084}
+  whatIsGround:
     serializedVersion: 2
     m_Bits: 256
+  groundRaycastLength: 2
   acceleration: 70
   gravity: 20
   steering: 80
+--- !u!114 &241224084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 241224081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aabcddbeee387d342876c7ee46176983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationX: {fileID: 1551593618173742879}
+  rotationY: {fileID: 1559179618}
+  kartModel: {fileID: 9220377739927854189}
+  slopeLerpingSpeed: 8
 --- !u!64 &435560716
 MeshCollider:
   m_ObjectHideFlags: 0

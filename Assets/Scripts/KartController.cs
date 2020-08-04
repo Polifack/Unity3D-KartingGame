@@ -5,15 +5,22 @@ using UnityEngine;
 
 public class KartController : MonoBehaviour
 {
+    //Kark components
     public Rigidbody sphere;
-    public Transform kartXRotation;
-    public Transform kartYRotation;
-    public LayerMask ground;
-    
+    public KartVisual kartVisuals;
+
+    //Ground raycasting parameters
+    public LayerMask whatIsGround;
+    public float groundRaycastLength;
+
+    //Kart movement parameters
     public float acceleration;
     public float gravity;
     public float steering;
 
+    //Kart movement dynamics
+    private float speed;
+    private float rotate;
     private float currentRotate;
     private float currentSpeed;
     
@@ -21,10 +28,6 @@ public class KartController : MonoBehaviour
     private float accelerationInput; //r2
     private float brakesInput; //l2
     private float axisInput; //axis
-
-    //Kart
-    private float speed;
-    private float rotate;
 
     public void Steer(int direction, float ammount)
     {
@@ -53,35 +56,40 @@ public class KartController : MonoBehaviour
 
     private void Update()
     {
-        //Set the global position according to the sphere position
-        transform.position = sphere.transform.position - new Vector3(0, 1.2f, 0);
+        //Update kart model position
+        kartVisuals.setPosition(sphere.transform.position - new Vector3(0, 1.2f, 0));
 
         //Set the speed according to the acceleration value and the trigger pressure
         speed = accelerationInput * acceleration;
 
-        //Check for axis
+        //Check for axis and compute steer rotation
         if (axisInput != 0) {
             int steerDirection = (axisInput > 0) ? 1 : -1;
             float steerAmmount = Mathf.Abs(axisInput);
 
             Steer(steerDirection, steerAmmount);
         }
+
+        //Compute speed
         currentSpeed = Mathf.SmoothStep(currentSpeed, speed, Time.deltaTime * 12f); speed = 0f;
         currentRotate = Mathf.Lerp(currentRotate, rotate, Time.deltaTime * 4f); rotate = 0f;
 
         //Check for ground slope
         RaycastHit hit;
-        Physics.Raycast(kartYRotation.transform.position + Vector3.up, Vector3.down, out hit, 2f, ground);
-        kartYRotation.up = Vector3.Lerp(kartYRotation.up, hit.normal, Time.deltaTime * 8.0f);
-        kartYRotation.Rotate(0, transform.eulerAngles.y, 0);
+        Physics.Raycast(sphere.transform.position, Vector3.down, out hit, groundRaycastLength, whatIsGround);
+
+        //Rotate kart model according to the slope
+        kartVisuals.setYRotation(hit.normal);
     }
 
     private void FixedUpdate()
     {
-        sphere.AddForce(kartXRotation.forward * currentSpeed, ForceMode.Acceleration);
-
+        //Apply strengths to the sphere
+        sphere.AddForce(kartVisuals.GetForwardVector() * currentSpeed, ForceMode.Acceleration);
         sphere.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
 
-        transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y + currentRotate, 0), Time.deltaTime * 5f);
+        //Rotate the whole kart according to the axis
+        transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y + currentRotate, 0),
+                    Time.deltaTime * 5f);
     }
 }
