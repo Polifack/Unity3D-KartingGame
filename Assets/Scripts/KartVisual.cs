@@ -10,9 +10,14 @@ public class KartVisual : MonoBehaviour
 
     //Kart model
     public GameObject kartModel;
+    public GameObject steeringWheel;
+    public GameObject[] backWheels;
+    public GameObject[] frontWheels;
 
     //Animation parameters  
     public float slopeLerpingSpeed;
+    public float steeringWheelRotationPower;
+    public float frontWheelRotationPower;
 
     //Sets kart rotation according to a slope
     public void setYRotation(Vector3 normalVector)
@@ -35,4 +40,34 @@ public class KartVisual : MonoBehaviour
     {
         transform.position = newPosition;
     }
+
+    //Rotates the steering wheel
+    public void rotateSteeringWheel(float ammount)
+    {
+        steeringWheel.transform.eulerAngles = new Vector3(steeringWheel.transform.eulerAngles.x, steeringWheel.transform.eulerAngles.y, ammount* steeringWheelRotationPower);
+    }
+
+    public void rotateFrontWheels(float ammount) {
+        float rotationValue = Mathf.Clamp(ammount * frontWheelRotationPower, -30, 30);
+        foreach (GameObject go in frontWheels)
+        {
+            Vector3 rotationVector = new Vector3(0, (rotationValue), 0);
+            go.transform.localRotation = Quaternion.Euler(rotationVector);
+        }
+    }
+
+    public void rotateWheels(float ammount)
+    {
+        foreach (GameObject go in frontWheels)
+        {
+            Vector3 rotationVector = new Vector3(0, 0, go.transform.localEulerAngles.z+ ammount);
+            go.transform.localRotation = Quaternion.Euler(rotationVector);
+        }
+        foreach (GameObject go in backWheels)
+        {
+            Vector3 rotationVector = new Vector3(0, (0), go.transform.localEulerAngles.z + ammount);
+            go.transform.localRotation = Quaternion.Euler(rotationVector);
+        }
+    }
+
 }

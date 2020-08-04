@@ -245,7 +245,7 @@ Transform:
   m_Children:
   - {fileID: 1559179618}
   m_Father: {fileID: 926744600}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &241224083
 MonoBehaviour:
@@ -265,8 +265,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   groundRaycastLength: 2
-  acceleration: 70
-  gravity: 20
+  kartWeight: 20
+  acceleration: 250
+  gravity: 10
   steering: 80
 --- !u!114 &241224084
 MonoBehaviour:
@@ -283,7 +284,16 @@ MonoBehaviour:
   rotationX: {fileID: 1551593618173742879}
   rotationY: {fileID: 1559179618}
   kartModel: {fileID: 9220377739927854189}
+  steeringWheel: {fileID: 1337516621926487603}
+  backWheels:
+  - {fileID: 3995884395067121058}
+  - {fileID: 3086212452101412604}
+  frontWheels:
+  - {fileID: 6698116404865650786}
+  - {fileID: 1365494338065306879}
   slopeLerpingSpeed: 8
+  steeringWheelRotationPower: 2.5
+  frontWheelRotationPower: 0.25
 --- !u!64 &435560716
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -375,7 +385,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 926744600}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &669800716
 Rigidbody:
@@ -385,10 +395,10 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 669800714}
   serializedVersion: 2
-  m_Mass: 300
+  m_Mass: 10
   m_Drag: 2
   m_AngularDrag: 2
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -510,7 +520,7 @@ GameObject:
   - component: {fileID: 721189408}
   - component: {fileID: 721189407}
   - component: {fileID: 721189406}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -661,8 +671,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 669800715}
   - {fileID: 241224082}
+  - {fileID: 669800715}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -763,7 +773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followTarget: {fileID: 241224081}
-  distanceToTarget: {x: 0, y: 3, z: -8}
+  distanceToTarget: {x: 0, y: 5, z: -8}
 --- !u!64 &1020016203
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1426,13 +1436,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1337516621926487603}
-  m_LocalRotation: {x: -0.59636784, y: 0.3799282, z: -0.3799282, w: 0.59636784}
+  m_LocalRotation: {x: -0.15304583, y: 0.6903456, z: 0.15304585, w: 0.6903455}
   m_LocalPosition: {x: -0.59134114, y: 0.88715434, z: 0.10931114}
   m_LocalScale: {x: 2.6613438, y: 2.6613438, z: 0.7502415}
   m_Children: []
   m_Father: {fileID: 5309186967916211838}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -25.000002, y: 90.00001, z: 0}
 --- !u!33 &186990567448738237
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1805,7 +1815,7 @@ Transform:
   m_LocalScale: {x: -0.7253381, y: -0.7253381, z: -1}
   m_Children: []
   m_Father: {fileID: 5309186967916211838}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2265335725637771392
 MeshFilter:
@@ -1916,7 +1926,7 @@ GameObject:
   - component: {fileID: 134317234864357214}
   - component: {fileID: 1509302168444327856}
   m_Layer: 0
-  m_Name: FR Wheel
+  m_Name: BR Wheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2380,8 +2390,8 @@ Transform:
   - {fileID: 272497263933841647}
   - {fileID: 177738091730794194}
   - {fileID: 1014783702279044091}
-  - {fileID: 6578811092136271567}
   - {fileID: 2046372319445734590}
+  - {fileID: 6578811092136271567}
   - {fileID: 2427831849693833124}
   - {fileID: 4879478906706019860}
   - {fileID: 213147387448532088}
@@ -3164,7 +3174,7 @@ Transform:
   m_LocalScale: {x: 0.85792, y: 0.85792, z: 1.1827863}
   m_Children: []
   m_Father: {fileID: 5309186967916211838}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &6690204401537866151
 MeshRenderer:

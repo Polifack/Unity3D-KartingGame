@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class KartController : MonoBehaviour
     public float groundRaycastLength;
 
     //Kart movement parameters
+    public float kartWeight;
     public float acceleration;
     public float gravity;
     public float steering;
@@ -23,6 +25,7 @@ public class KartController : MonoBehaviour
     private float rotate;
     private float currentRotate;
     private float currentSpeed;
+    private bool isGrounded;
     
     //Input data
     private float accelerationInput; //r2
@@ -77,16 +80,29 @@ public class KartController : MonoBehaviour
         //Check for ground slope
         RaycastHit hit;
         Physics.Raycast(sphere.transform.position, Vector3.down, out hit, groundRaycastLength, whatIsGround);
+        isGrounded = (hit.collider != null);
+        Debug.Log(isGrounded);
 
         //Rotate kart model according to the slope
         kartVisuals.setYRotation(hit.normal);
+
+        //Rotate kart steering wheel
+        kartVisuals.rotateSteeringWheel(currentRotate);
+        kartVisuals.rotateFrontWheels(currentRotate);
+        kartVisuals.rotateWheels(currentSpeed);
     }
 
     private void FixedUpdate()
     {
         //Apply strengths to the sphere
-        sphere.AddForce(kartVisuals.GetForwardVector() * currentSpeed, ForceMode.Acceleration);
-        sphere.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
+        if (isGrounded)
+            sphere.AddForce(kartVisuals.GetForwardVector() * currentSpeed, ForceMode.Acceleration);
+
+        Debug.DrawRay(transform.position, kartVisuals.GetForwardVector(), Color.red);
+
+        sphere.AddForce(Vector3.down * kartWeight * gravity, ForceMode.Acceleration);
+
+        Debug.DrawRay(transform.position, Vector3.down * kartWeight * gravity, Color.blue);
 
         //Rotate the whole kart according to the axis
         transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y + currentRotate, 0),
