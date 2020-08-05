@@ -5264,7 +5264,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 174515234}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.909895, y: -10, z: -4.120753}
+  m_LocalPosition: {x: -9.909895, y: -30, z: -4.120753}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 759120791}
@@ -10287,19 +10287,23 @@ MonoBehaviour:
     m_Bits: 256
   groundRaycastLength: 2
   kartWeight: 10
+  gravity: 9.8
   acceleration: 200
   brakesStrength: 200
-  gravity: 9.8
   steering: 10
+  rotateSpeed: 7.5
   driftPositiveMod: 1.75
   driftNegativeMod: 0.25
   driftJumpStrength: 100
   driftTimeFirst: 50
   driftTimeSecond: 100
   driftTimeThird: 150
-  driftFirstColor: {r: 1, g: 0.9160186, b: 0, a: 1}
+  driftFirstColor: {r: 0, g: 0.9600265, b: 1, a: 1}
   driftSecondColor: {r: 1, g: 0.39607844, b: 0, a: 1}
   driftThirdColor: {r: 0.7928543, g: 0, b: 1, a: 1}
+  boostStrength: 10
+  maxBoostStrength: 200
+  speedFovModifier: 0.4
   particles: {fileID: 241224085}
 --- !u!114 &241224084
 MonoBehaviour:
@@ -10326,8 +10330,8 @@ MonoBehaviour:
   slopeLerpingSpeed: 8
   driftingLerpingSpeed: 0.01
   driftKartRotation: 30
-  steeringWheelRotationPower: 2.5
-  frontWheelRotationPower: 0.25
+  steeringWheelRotationPower: 5
+  frontWheelRotationPower: 5
 --- !u!114 &241224085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22490,10 +22494,10 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 1}
+  m_BackGroundColor: {r: 0.050200418, g: 0, b: 0.18867922, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
-  m_FOVAxisMode: 0
+  m_FOVAxisMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
   m_FocalLength: 50
@@ -22505,7 +22509,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 58.726677
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -22531,7 +22535,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: -9.9, y: 1.61, z: -10.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -22549,8 +22553,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f88ca67c63665be40afb1a6bc5d47cb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 963194227}
   followTarget: {fileID: 241224081}
   distanceToTarget: {x: 0, y: 6, z: -12}
+  minFov: 60
+  maxFov: 150
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
