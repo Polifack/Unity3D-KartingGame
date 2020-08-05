@@ -23,8 +23,16 @@
                 },
                 {
                     "name": "Brakes",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "2d637014-8a11-4abf-b0b0-61bf2b70b5a1",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Drift",
+                    "type": "Button",
+                    "id": "c1c1cf7a-1106-49e1-89dc-a298d8ca3e39",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -61,6 +69,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Brakes",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "388d4212-9200-4260-bea2-c255c781faac",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Drift",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

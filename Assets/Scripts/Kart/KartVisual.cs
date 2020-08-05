@@ -16,17 +16,32 @@ public class KartVisual : MonoBehaviour
 
     //Animation parameters  
     public float slopeLerpingSpeed;
+    public float driftingLerpingSpeed;
+
+    public float driftKartRotation;
+
     public float steeringWheelRotationPower;
     public float frontWheelRotationPower;
+    
 
     //Sets kart rotation according to a slope
-    public void setYRotation(Vector3 normalVector)
+    public void setSlopeRotation(Vector3 normalVector)
     {
         rotationY.up = Vector3.Lerp(
             rotationY.up, 
             normalVector, 
             Time.deltaTime * slopeLerpingSpeed);
         rotationY.Rotate(0, transform.eulerAngles.y, 0);
+    }
+
+    public void setDriftingDirection(float direction)
+    {
+        Debug.Log(direction);
+        
+        rotationX.localEulerAngles = (direction != 0) ?
+            new Vector3(0, direction*driftKartRotation, 0) :
+            new Vector3(0, 0, 0);
+        Debug.Log(rotationX.localEulerAngles);
     }
 
     //Returns the vector that identifies where the kart is looking at

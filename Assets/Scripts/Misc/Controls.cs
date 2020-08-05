@@ -36,8 +36,16 @@ public class @Controls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Brakes"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""2d637014-8a11-4abf-b0b0-61bf2b70b5a1"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Drift"",
+                    ""type"": ""Button"",
+                    ""id"": ""c1c1cf7a-1106-49e1-89dc-a298d8ca3e39"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -76,6 +84,17 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""action"": ""Brakes"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""388d4212-9200-4260-bea2-c255c781faac"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -87,6 +106,7 @@ public class @Controls : IInputActionCollection, IDisposable
         m_Kart_Accelerate = m_Kart.FindAction("Accelerate", throwIfNotFound: true);
         m_Kart_Movement = m_Kart.FindAction("Movement", throwIfNotFound: true);
         m_Kart_Brakes = m_Kart.FindAction("Brakes", throwIfNotFound: true);
+        m_Kart_Drift = m_Kart.FindAction("Drift", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -139,6 +159,7 @@ public class @Controls : IInputActionCollection, IDisposable
     private readonly InputAction m_Kart_Accelerate;
     private readonly InputAction m_Kart_Movement;
     private readonly InputAction m_Kart_Brakes;
+    private readonly InputAction m_Kart_Drift;
     public struct KartActions
     {
         private @Controls m_Wrapper;
@@ -146,6 +167,7 @@ public class @Controls : IInputActionCollection, IDisposable
         public InputAction @Accelerate => m_Wrapper.m_Kart_Accelerate;
         public InputAction @Movement => m_Wrapper.m_Kart_Movement;
         public InputAction @Brakes => m_Wrapper.m_Kart_Brakes;
+        public InputAction @Drift => m_Wrapper.m_Kart_Drift;
         public InputActionMap Get() { return m_Wrapper.m_Kart; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -164,6 +186,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Brakes.started -= m_Wrapper.m_KartActionsCallbackInterface.OnBrakes;
                 @Brakes.performed -= m_Wrapper.m_KartActionsCallbackInterface.OnBrakes;
                 @Brakes.canceled -= m_Wrapper.m_KartActionsCallbackInterface.OnBrakes;
+                @Drift.started -= m_Wrapper.m_KartActionsCallbackInterface.OnDrift;
+                @Drift.performed -= m_Wrapper.m_KartActionsCallbackInterface.OnDrift;
+                @Drift.canceled -= m_Wrapper.m_KartActionsCallbackInterface.OnDrift;
             }
             m_Wrapper.m_KartActionsCallbackInterface = instance;
             if (instance != null)
@@ -177,6 +202,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Brakes.started += instance.OnBrakes;
                 @Brakes.performed += instance.OnBrakes;
                 @Brakes.canceled += instance.OnBrakes;
+                @Drift.started += instance.OnDrift;
+                @Drift.performed += instance.OnDrift;
+                @Drift.canceled += instance.OnDrift;
             }
         }
     }
@@ -186,5 +214,6 @@ public class @Controls : IInputActionCollection, IDisposable
         void OnAccelerate(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
         void OnBrakes(InputAction.CallbackContext context);
+        void OnDrift(InputAction.CallbackContext context);
     }
 }

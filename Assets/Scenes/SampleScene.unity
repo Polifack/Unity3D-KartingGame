@@ -350,7 +350,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &174515235
 AudioSource:
   m_ObjectHideFlags: 0
@@ -746,10 +746,10 @@ MonoBehaviour:
     m_Bits: 256
   groundRaycastLength: 2
   kartWeight: 10
-  acceleration: 300
-  brakesStrength: 300
+  acceleration: 200
+  brakesStrength: 200
   gravity: 9.8
-  steering: 30
+  steering: 10
 --- !u!114 &241224084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -773,6 +773,8 @@ MonoBehaviour:
   - {fileID: 6698116404865650786}
   - {fileID: 1365494338065306879}
   slopeLerpingSpeed: 8
+  driftingLerpingSpeed: 0.01
+  driftKartRotation: 10
   steeringWheelRotationPower: 2.5
   frontWheelRotationPower: 0.25
 --- !u!1001 &244424454
@@ -1741,7 +1743,7 @@ Transform:
   m_GameObject: {fileID: 551452964}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 9.909895, y: 4.344284, z: 4.120753}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children:
   - {fileID: 2133484926}
   - {fileID: 1657983760}
@@ -2256,14 +2258,14 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 669800714}
   serializedVersion: 2
-  m_Mass: 10
+  m_Mass: 300
   m_Drag: 2
-  m_AngularDrag: 2
-  m_UseGravity: 0
+  m_AngularDrag: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!135 &669800717
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3121,7 +3123,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 926744599}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -11.4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 241224082}
