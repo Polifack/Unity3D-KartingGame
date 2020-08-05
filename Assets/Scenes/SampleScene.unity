@@ -350,7 +350,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!82 &174515235
 AudioSource:
   m_ObjectHideFlags: 0
@@ -750,6 +750,9 @@ MonoBehaviour:
   brakesStrength: 200
   gravity: 9.8
   steering: 10
+  driftPositiveMod: 1.75
+  driftNegativeMod: 0.25
+  driftJumpStrength: 100
 --- !u!114 &241224084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -774,7 +777,7 @@ MonoBehaviour:
   - {fileID: 1365494338065306879}
   slopeLerpingSpeed: 8
   driftingLerpingSpeed: 0.01
-  driftKartRotation: 10
+  driftKartRotation: 30
   steeringWheelRotationPower: 2.5
   frontWheelRotationPower: 0.25
 --- !u!1001 &244424454
@@ -2258,7 +2261,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 669800714}
   serializedVersion: 2
-  m_Mass: 300
+  m_Mass: 10
   m_Drag: 2
   m_AngularDrag: 0
   m_UseGravity: 1

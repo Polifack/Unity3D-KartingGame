@@ -21,6 +21,9 @@ public class KartController : MonoBehaviour
     public float brakesStrength;
     public float gravity;
     public float steering;
+    public float driftPositiveMod;
+    public float driftNegativeMod;
+    public float driftJumpStrength;
 
     //Kart movement dynamics
     private float speed;
@@ -29,13 +32,68 @@ public class KartController : MonoBehaviour
     private float currentSpeed;
     private bool isGrounded;
 
-    private bool isDrifting = false;
+    private bool drift = false;
     private float driftDirection;
+
+    private bool boost = false;
+    private float boostDirection;
 
     //Input data
     private float accelerationInput; //r2
     private float brakesInput; //l2
     private float axisInput; //axis
+
+
+    public void setDrifting(bool b){
+        driftDirection = b ? Mathf.Sign(currentRotate):0;
+
+        //Si estamos empezando el drifteo hacemos un minisalto
+        if (b && !drift)
+            sphere.AddForce(new Vector3(0, driftJumpStrength, 0), ForceMode.Impulse);
+        
+        drift = b;
+    }
+    public bool isDrifting() {
+        driftDirection = 0;
+        kartVisuals.setDriftingDirection(0);
+        return drift; 
+    }
+
+    public void setBoost(bool b) {
+        boostDirection = currentRotate;
+        boost = b; 
+    }
+    public bool isBoosting() {
+        boostDirection = 0;
+        return boost; 
+    }
+
+    public void setupControls()
+    {
+        //Accelerate (R2)
+        GameManager.instance.controls.Kart.Accelerate.performed += value =>
+            accelerationInput = value.ReadValue<float>();
+        GameManager.instance.controls.Kart.Accelerate.canceled += value =>
+            accelerationInput = value.ReadValue<float>();
+
+        //Movement (Left Stick)
+        GameManager.instance.controls.Kart.Movement.performed += value =>
+            axisInput = value.ReadValue<float>();
+        GameManager.instance.controls.Kart.Movement.canceled += value =>
+            axisInput = value.ReadValue<float>();
+
+        //Brakes (L2)
+        GameManager.instance.controls.Kart.Brakes.performed += value =>
+            brakesInput = value.ReadValue<float>();
+        GameManager.instance.controls.Kart.Brakes.canceled += value =>
+            brakesInput = value.ReadValue<float>();
+        
+        //Drifting (Circle)
+        GameManager.instance.controls.Kart.Drift.started += value =>
+            setDrifting(true);
+        GameManager.instance.controls.Kart.Drift.canceled += value =>
+            setDrifting(false);
+    }
 
     public void Steer(int direction, float ammount)
     {
@@ -44,11 +102,11 @@ public class KartController : MonoBehaviour
 
         if (driftDirection!=0 && direction * driftDirection > 0)
         {
-            ammount = ammount * 1.5f;
+            ammount = ammount * driftPositiveMod;
         }
         else if (driftDirection!=0 && direction * driftDirection < 0)
         {
-            ammount = ammount * 0.25f;
+            ammount = ammount * driftNegativeMod;
         }
         
 
@@ -57,37 +115,7 @@ public class KartController : MonoBehaviour
 
     private void Start()
     {
-        GameManager.instance.controls.Kart.Accelerate.performed += value =>
-            accelerationInput = value.ReadValue<float>();
-        GameManager.instance.controls.Kart.Accelerate.canceled += value =>
-            accelerationInput = value.ReadValue<float>();
-
-        GameManager.instance.controls.Kart.Movement.performed += value =>
-            axisInput = value.ReadValue<float>();
-        GameManager.instance.controls.Kart.Movement.canceled += value =>
-            axisInput = value.ReadValue<float>();
-        
-        GameManager.instance.controls.Kart.Brakes.performed += value =>
-            brakesInput = value.ReadValue<float>();
-        GameManager.instance.controls.Kart.Brakes.canceled += value =>
-            brakesInput = value.ReadValue<float>();
-        GameManager.instance.controls.Kart.Drift.started += value =>
-        {
-            driftDirection = Mathf.Sign(currentRotate);
-            kartVisuals.setDriftingDirection(driftDirection);
-            isDrifting = true;
-
-            // Es necesario hacer que cuando empiece el drifteo el coche pegue un "volantazo" con salto
-            // en la direccion que se desea driftear
-        };
-
-        GameManager.instance.controls.Kart.Drift.canceled += value =>
-        {
-            driftDirection = 0;
-            kartVisuals.setDriftingDirection(0);
-            isDrifting = false;
-        };
-            
+        setupControls();
     }
 
     private void Update()
@@ -117,6 +145,7 @@ public class KartController : MonoBehaviour
 
         //Rotate kart model according to the slope
         kartVisuals.setSlopeRotation(hit.normal);
+        kartVisuals.setDriftingDirection(driftDirection);
 
         //Rotate kart steering wheel
         kartVisuals.rotateSteeringWheel(currentRotate);

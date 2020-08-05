@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class KartVisual : MonoBehaviour
 {
@@ -22,7 +20,6 @@ public class KartVisual : MonoBehaviour
 
     public float steeringWheelRotationPower;
     public float frontWheelRotationPower;
-    
 
     //Sets kart rotation according to a slope
     public void setSlopeRotation(Vector3 normalVector)
@@ -36,12 +33,11 @@ public class KartVisual : MonoBehaviour
 
     public void setDriftingDirection(float direction)
     {
-        Debug.Log(direction);
-        
-        rotationX.localEulerAngles = (direction != 0) ?
-            new Vector3(0, direction*driftKartRotation, 0) :
-            new Vector3(0, 0, 0);
-        Debug.Log(rotationX.localEulerAngles);
+        float nextYRotationValue = (direction != 0) ?
+            direction * driftKartRotation :
+            0;
+        nextYRotationValue = Mathf.LerpAngle(rotationX.localEulerAngles.y, nextYRotationValue, Time.deltaTime * slopeLerpingSpeed);
+        rotationX.localEulerAngles = new Vector3(0, nextYRotationValue, 0);
     }
 
     //Returns the vector that identifies where the kart is looking at
