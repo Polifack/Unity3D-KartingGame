@@ -21,9 +21,21 @@ public class KartController : MonoBehaviour
     public float brakesStrength;
     public float gravity;
     public float steering;
+    
     public float driftPositiveMod;
     public float driftNegativeMod;
     public float driftJumpStrength;
+    
+    public float driftTimeFirst;
+    public float driftTimeSecond;
+    public float driftTimeThird;
+
+    public Color driftFirstColor;
+    public Color driftSecondColor;
+    public Color driftThirdColor;
+
+    //Particles
+    public KartParticles particles;
 
     //Kart movement dynamics
     private float speed;
@@ -34,9 +46,7 @@ public class KartController : MonoBehaviour
 
     private bool drift = false;
     private float driftDirection;
-
-    private bool boost = false;
-    private float boostDirection;
+    private int driftAccumulator;
 
     //Input data
     private float accelerationInput; //r2
@@ -44,12 +54,24 @@ public class KartController : MonoBehaviour
     private float axisInput; //axis
 
 
+
+
+    //Drifting
     public void setDrifting(bool b){
         driftDirection = b ? Mathf.Sign(currentRotate):0;
 
-        //Si estamos empezando el drifteo hacemos un minisalto
         if (b && !drift)
+        {
+            driftAccumulator = 0;
+            particles.doDriftParticles(driftDirection);
             sphere.AddForce(new Vector3(0, driftJumpStrength, 0), ForceMode.Impulse);
+        }
+        if (!b)
+        {
+            driftAccumulator = 0;
+            particles.setParticleColor(Color.white);
+            particles.stopDriftParticles();
+        }
         
         drift = b;
     }
@@ -59,15 +81,8 @@ public class KartController : MonoBehaviour
         return drift; 
     }
 
-    public void setBoost(bool b) {
-        boostDirection = currentRotate;
-        boost = b; 
-    }
-    public bool isBoosting() {
-        boostDirection = 0;
-        return boost; 
-    }
 
+    //Controls
     public void setupControls()
     {
         //Accelerate (R2)
@@ -94,7 +109,8 @@ public class KartController : MonoBehaviour
         GameManager.instance.controls.Kart.Drift.canceled += value =>
             setDrifting(false);
     }
-
+    
+    //Steering manager
     public void Steer(int direction, float ammount)
     {
         // Si estamos drifteando duplicamos la potencia del volante en la direccion del drifteo
@@ -113,6 +129,33 @@ public class KartController : MonoBehaviour
         rotate = (steering * direction) * ammount;
     }
 
+    //Drift accumulator
+    public void doDrift()
+    {
+        if (drift)
+        {
+            driftAccumulator += 1;
+
+            if (driftAccumulator == driftTimeFirst)
+            {
+                Debug.Log("Changing color first!");
+                particles.setParticleColor(driftFirstColor);
+            }
+            if (driftAccumulator == driftTimeSecond)
+            {
+                Debug.Log("Changing color second!");
+                particles.setParticleColor(driftSecondColor);
+            }
+            if (driftAccumulator == driftTimeThird)
+            {
+                Debug.Log("Changing color third!");
+                particles.setParticleColor(driftThirdColor);
+            }
+        }
+    }
+
+
+    //Unity
     private void Start()
     {
         setupControls();
@@ -164,5 +207,8 @@ public class KartController : MonoBehaviour
         if (currentSpeed!=0)
             transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y + currentRotate, 0),
                     Time.deltaTime * 5f);
+
+        //Accumulate the drift power
+        doDrift();
     }
 }
